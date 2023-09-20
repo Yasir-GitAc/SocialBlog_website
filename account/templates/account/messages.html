@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+  
+
+  <main class="main_div_right">
+    {% for room in user_rooms %}
+      <a href="{% url 'account:inbox' room_name=room.name %}">
+        <div class="multiple_type_list">
+          
+          <div class="typelist_div_one">
+            <div class="profile_picture typelist_profile_picture">
+              {% for participant in room.participants.all %}
+                {% if participant != request.user.profile %}
+                  <a href="{% url 'account:inbox' room_name=room.name %}">
+                    <img src="{{participant.profile_picture.url}}" class="profile_picture_img" alt="profile_picture" >
+                  </a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+  
+          <div class="typelist_div_two">
+            <div class="typelist_owner_div">
+              {% for participant in room.participants.all %}
+                {% if participant != request.user.profile %}
+                  <a href="{% url 'account:inbox' room_name=room.name %}" ><p>{{participant.name}}</p></a>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="typelist_subject_div">
+              {% for message in room.message_set.all %}
+
+                {% if message.seen == False and message.writer != request.user.profile %}
+                  <a href="{% url 'account:inbox' room_name=room.name %}">
+                    <p>{{message.writer.name}} : {{message}}</p>
+                  </a>
+                  {{break}}
+                  
+                {% else %}
+
+                  {% if message.writer != request.user.profile and message == room.message_set.last %}
+                    <a href="{% url 'account:inbox' room_name=room.name %}"><p>{{message.writer.name}} : {{message}}</p></a>
+                    {{break}}
+                  {% else %}
+                  
+                    {% if message == room.message_set.last %}
+                      <a href="{% url 'account:inbox' room_name=room.name %}">
+                        {% if message.writer != request.user.profile %}
+                          <p>{{message.writer.name}} : {{message}}</p></a>
+                        {% else %}
+                          <p>You : {{message}}</p>
+                        {% endif %}
+                      </a>
+                    {{break}}
+                    {% endif %}
+
+                  {% endif %}
+
+                {% endif %}
+
+              {% endfor %}
+            </div>
+          </div>
+          
+          {% for message in room.message_set.all %}
+            {% if message.seen == False and message.writer != request.user.profile %}
+              <div class="typelist_div_three">
+                <div class="typelist_unseen_indicator_dot" ></div>
+              </div>
+            {% endif %}
+            {{break}}
+          {% endfor %}
+        </div>
+      </a>
+    {% endfor %}
+
+  </main>
+
+{% endblock content %}

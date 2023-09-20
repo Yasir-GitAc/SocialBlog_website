@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <main class="main_div_right">
+
+    <div class="multiple_type_list">
+
+      <div class="typelist_div_two">
+        <div class="typelist_button_div">
+          <form method="GET" class="input_box_form">
+            <input type="text" name="query" value="{{query}}" placeholder="search profiles" >
+            <button type="submit">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+      
+        </div>
+      </div>
+
+    </div>    
+  
+
+
+    {% for profile in profiles %}
+
+      <div class="multiple_type_list">
+
+        <div class="typelist_div_one">
+          <div class="profile_picture typelist_profile_picture">
+            <a href="{% url 'account:profile' pk=profile.id %}">
+              <img src="{{profile.profile_picture.url}}" class="profile_picture_img" alt="profile_picture" >
+            </a>
+          </div>
+        </div>
+    
+        <div class="typelist_div_two">
+          <div class="typelist_owner_div">
+            <a href="{% url 'account:profile' pk=profile.id %}"><p>{{profile.name}}</p></a>
+          </div>
+          <div class="typelist_subject_div">
+            <p>
+              {{profile.bio| slice:":100"}}
+            </p>
+          </div>
+          <div class="typelist_button_div">
+            <a href="{% url 'account:profile' pk=profile.id %}" class="btn btn_typelist">Go To Profile</a>
+          </div>
+        </div>
+         
+      </div>    
+
+    {% endfor %}
+
+  </main>
+
+{% endblock content %}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kenia&family=Mukta:wght@300;700&display=swap" rel="stylesheet">
+  <title>Socialblog | stay connected</title>
+</head>
+<body>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert_box">
+        <div class="alert-text" >
+          <p>{{message}}</p>
+        </div>
+        <span id="alert-close-btn">
+          <i class="fa-solid fa-xmark close_btn_icon"></i>
+        </span>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <main class="main_div">
+    <div class="form_div">
+  
+      <div class="form_header">
+        <div class="go_back_button">
+          <a href="{% url 'account:profile' pk=request.user.profile.id %}">
+            <i class="fa-solid fa-arrow-left" style="color: #abaeb3;"></i>
+          </a>
+        </div>
+        <div class="form_header_text">
+          <p>
+            Are You Sure ? Deleted Post Is Not Recoverable
+          </p>
+        </div>
+      </div>
+  
+      <div class="form_main_section">
+        <div class="post">
+  
+          <div class="post_header post_const_margin">
+            <div class="profile_picture post_profile_picture">
+              <a><img src="{{post.owner.profile_picture.url}}" class="profile_picture_img" alt="profile_picture" ></a>
+            </div>
+            <div class="post_owner_div">
+              <a>
+                <p>{{post.owner.name}}</p>
+                <small>{{post.created}}</small>
+              </a>
+            </div>
+          </div>
+      
+          <div class="post_text_content post_const_margin">
+            <p>
+              {{post.post_content}}
+            </p>
+          </div>
+      
+          {% if post.post_img %}
+            <div class="post_content">
+              <img src="{{post.post_img.url}}" alt="uploaded_image" >
+            </div>
+          {% endif %}
+  
+          <div class="post_statics post_const_margin">
+            <small><a>Gellert Grindelwald,rin walder and 52 others</a></small>
+            <small>and</small>
+            <small class="comment_static_small"><a>7 comments</a></small>
+          </div>
+      
+          <div class="post_buttons post_const_margin">
+            
+            <a class="like_button_div">
+              <button class="like_button">
+                <i class="fa-regular fa-thumbs-up" style="color: #abaeb3;"></i>
+              </button>
+            </a>
+            
+            <a class="comment_button_div">
+              <button class="comment_button">
+                <i class="fa-regular fa-comment" style="color: #abaeb3;"></i>
+              </button>
+            </a>
+          </div>
+      
+          <div class="post_comment_section post_const_margin">
+      
+            <p class="view_all_comments"><a>View more comments</a></p>
+      
+            <div class="commenter_box">
+      
+              <div class="comment_header">
+                <div class="profile_picture cmnt_profile_picture">
+                  <a>
+                    <img src="images/profile_images/person-3.jpg" class="profile_picture_img" alt="profile_picture" >
+                  </a>
+                </div>
+                <div class="comment_owner">
+                  <a><p>rina walder</p></a>
+                </div>
+              </div>
+      
+              <div class="comment_content">
+                <p>In response, Newt Scamander's former professor</p>
+                <small class="commenter_box_small reply_box_btn">Reply</small>
+                <small class="commenter_box_small">sep 6 </small>
+              </div>
+      
+              <div class="input_box input_for_reply">
+                <form class="input_box_form">
+                  <input type="text" placeholder="write a reply">
+                  <button>
+                    <i class="fa-regular fa-paper-plane" style="color: #abaeb3;"></i>
+                  </button>
+                </form>
+              </div>
+      
+            </div>
+      
+            <div class="comment_input_box">
+              
+              <div class="profile_picture cmnt_input_profile_picture">
+                <a>
+                  <img src="images/profile_images/person-3.jpg" class="profile_picture_img" alt="profile_picture" >
+                </a>
+              </div>
+                
+              <form class="input_box_form input_for_comment">
+                <input type="text" placeholder="write your comment">
+                <button>
+                  <i class="fa-regular fa-paper-plane" style="color: #abaeb3;"></i>
+                </button>
+              </form>
+            
+            </div>
+      
+          </div>
+        </div>
+      </div>    
+  
+      <div class="form_button_section">
+        <a href="{% url 'post:confirm_delete' pk=post.id %}" class="btn btn_form">Confirm Delete</a>
+        <a href="{% url 'account:profile' pk=request.user.profile.id %}" class="btn btn_form">Go Back</a>
+      </div>
+  
+    </div>
+  </main>
+
+  <script src="{% static 'js/index.js' %}" ></script>
+</body>
+</html>

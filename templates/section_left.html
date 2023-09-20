@@ -1,0 +1,56 @@
+<section class="section_left" >
+  <div class="section_left_inner_div">
+
+    <div class="section_left_navigation">
+    
+      <div class="section_left_nav_profile_div">
+        <div class="profile_picture left_nav_profile_img_div">
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'account:profile' pk=request.user.profile.id %}">
+              <img src="{{request.user.profile.profile_picture.url}}" class="profile_picture_img" alt="profile_picture">
+            </a>
+          {% else %}
+            <a href="{% url 'account:login' %}">
+              <img src="images/profile_images/user-default.jpg" class="profile_picture_img" alt="profile_picture">
+            </a>
+          {% endif %}
+        </div>
+        <div class="left_nav_profile_name">
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'account:profile' pk=request.user.profile.id %}">
+              {% if request.user.profile.name %}
+                <p>{{request.user.profile.name}}</p>
+              {% else %}
+                <p>{{request.user.profile.username}}</p>
+              {% endif %}
+            </a>
+          {% else %}
+            <a href="{% url 'account:login' %}">
+              <p>UserName</p>
+            </a>
+          {% endif %}
+        </div>
+      </div>  
+      
+      <div class="section_left_nav_navlist">
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'account:profile' pk=request.user.profile.id %}"><i class="fa-regular fa-user" style="color: #abaeb3;"></i><span>Profile</span></a>
+        {% else %}
+          <a href="{% url 'account:login' %}"><i class="fa-regular fa-user" style="color: #abaeb3;"></i><span>Profile</span></a>
+        {% endif %}
+        <a href="{% url 'post:create_post' %}"><i class="fa-regular fa-square-plus" style="color: #abaeb3;"></i><span>New Post</span></a>
+        <a href="{% url 'account:notifications' %}"><i class="fa-regular fa-bell" style="color: #abaeb3;"></i><span>Notifications</span></a>
+        <a href="{% url 'account:messages' %}"><i class="fa-regular fa-message" style="color: #abaeb3;"></i><span>Messages</span></a>
+        <a href="{% url 'account:about' %}"><i class="fa-solid fa-users-rectangle" style="color: #abaeb3;"></i><span>Groups</span></a>
+      </div>
+      
+    </div>
+    <div class="section_left_footer">
+      <p>Demo Website For Practice</p>
+      <p>
+        &copy; 2023 <a href="#">Yasir_webdev</a>. All rights reserved.
+      </p>
+    </div>
+  </div>
+
+</section>

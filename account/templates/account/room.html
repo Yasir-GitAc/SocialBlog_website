@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" media="all" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kenia&family=Mukta:wght@300;700&display=swap" rel="stylesheet">
+  <title>Socialblog | stay connected</title>
+</head>
+<body>
+  
+  {% include 'navbar.html' %}
+
+  <div class="room_container_section">
+
+    <div class="room_left_section">
+      <div class="room_left_section_inner_div">
+
+        {% for room in user_rooms %}
+          <a href="{% url 'account:inbox' room_name=room.name %}">
+            <div class="multiple_type_list">
+              
+              <div class="typelist_div_one">
+                <div class="profile_picture typelist_profile_picture">
+                  {% for participant in room.participants.all %}
+                    {% if participant != request.user.profile %}
+                      <a href="{% url 'account:inbox' room_name=room.name %}">
+                        <img src="{{participant.profile_picture.url}}" class="profile_picture_img" alt="profile_picture" >
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+      
+              <div class="typelist_div_two">
+                <div class="typelist_owner_div">
+                  {% for participant in room.participants.all %}
+                    {% if participant != request.user.profile %}
+                      <a href="{% url 'account:inbox' room_name=room.name %}" ><p>{{participant.name}}</p></a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <div class="typelist_subject_div">
+                  {% for message in room.message_set.all %}
+    
+                    {% if message.seen == False and message.writer != request.user.profile %}
+                      <a href="{% url 'account:inbox' room_name=room.name %}">
+                        <p>{{message.writer.name}} : {{message}}</p>
+                      </a>
+                      {{break}}
+                      
+                    {% else %}
+    
+                      {% if message.writer != request.user.profile and message == room.message_set.last %}
+                        <a href="{% url 'account:inbox' room_name=room.name %}"><p>{{message.writer.name}} : {{message}}</p></a>
+                        {{break}}
+                      {% else %}
+                      
+                        {% if message == room.message_set.last %}
+                          <a href="{% url 'account:inbox' room_name=room.name %}">
+                            {% if message.writer != request.user.profile %}
+                              <p>{{message.writer.name}} : {{message}}</p></a>
+                            {% else %}
+                              <p>You : {{message}}</p>
+                            {% endif %}
+                          </a>
+                        {{break}}
+                        {% endif %}
+    
+                      {% endif %}
+    
+                    {% endif %}
+    
+                  {% endfor %}
+                </div>
+              </div>
+              
+              {% for message in room.message_set.all %}
+                {% if message.seen == False and message.writer != request.user.profile %}
+                  <div class="typelist_div_three">
+                    <div class="typelist_unseen_indicator_dot" ></div>
+                  </div>
+                {% endif %}
+                {{break}}
+              {% endfor %}
+            </div>
+          </a>
+        {% endfor %}
+  
+
+      </div>
+    </div>
+
+    <div class="room_right_section">
+      <div class="room_right_section_inner_div">
+        <div class="chat_box">
+
+          <div class="chat_box_header">
+            <div class="profile_picture chat_box_profile_picture">
+              <a href="{% url 'account:profile' pk=receiver_participant.id %}">
+                <img src="{{receiver_participant.profile_picture.url}}" class="profile_picture_img" alt="profile_picture" >
+              </a>
+            </div>
+            <div class="chat_box_owner_div">
+              <a href="{% url 'account:profile' pk=receiver_participant.id %}">
+                <p>{{receiver_participant.name}}</p>
+              </a>
+            </div>
+          </div>
+
+          <div class="chat_box_message_section" id="chat-log">
+
+            {% for message in messages %}
+              <div class="chat">
+                <div class="chat_paragraph_div">
+                  <p>
+                    {{message}}
+                  </p>
+                </div>
+              </div>
+
+            {% endfor %}
+
+          </div>
+
+          <div class="chat_box_input_section">
+            <input id="chat-message-input" type="text" placeholder="write your message">
+            <button id="chat-message-submit" class="btn_send"><p>Send</p></button>          
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {{room.name|json_script:"roomName"}}
+  {{ request.user.profile.id|json_script:"userProfile" }};
+
+
+  <script>
+    console.log("Sanity check from room.js.");
+    
+    const roomName = JSON.parse(document.getElementById('roomName').textContent);
+    const userProfileId = JSON.parse(document.getElementById('userProfile').textContent);
+    console.log(userProfileId)
+
+    let chatLog = document.querySelector('#chat-log');
+    let chatMessageInput = document.querySelector('#chat-message-input');
+    let chatMessageSubmit = document.querySelector('#chat-message-submit');
+
+    // submit if the user presses the enter key
+    chatMessageInput.onkeyup = function(e){
+      if(e.keyCode === 13){
+        chatMessageSubmit.click();
+      }
+    };
+
+
+    let chatSocket = null;
+
+    function connect() {
+      chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/" + roomName + "/");
+
+
+      chatSocket.onopen = function(e){
+        console.log('Successfully connected to the WebSocket.')
+      }
+
+      chatSocket.onclose = function(e){
+        console.log('WebSocket connection closed unexpectedly. Trying to reconnect in 2s...')
+        setTimeout(function(){
+          console.log('Reconnecting...');
+          connect();
+        }, 2000);
+      };
+
+      chatSocket.onmessage = function(e){
+        const data = JSON.parse(e.data)
+        console.log(data)
+
+        switch (data.type) {
+          case 'chat_message':
+            const chatMessageHTML = `
+            <div class="chat ">
+              <div class="chat_paragraph_div">
+                <p>${data.message}</p>
+              </div>
+            </div>`;
+            chatLog.innerHTML += chatMessageHTML;
+            break;
+          case 'user_join':
+            const chatInnerMessage = 
+            `
+            <div class="message_section_inner_message" >
+              <p>${data.message}</p>
+            </div>
+            `;
+            chatLog.innerHTML += chatInnerMessage;
+            break;
+          case 'user_leave':
+            const chatInnerMgs =`
+            <div class="message_section_inner_message" >
+              <p>${data.message}</p>
+            </div>
+            `;
+            chatLog.innerHTML += chatInnerMgs;
+            break;
+          default:
+            console.error('unknown message type');
+            break;
+        }
+        // scroll 'chatLog' to the bottom
+        chatLog.scrollTop = chatLog.scrollHeight;
+      }
+
+      chatSocket.onerror = function(err){
+        console.log("WebSocket encountered an error: " + err.message);
+        console.log("Closing the socket.");
+        chatSocket.close();
+      }
+
+    }
+    connect()
+
+    chatMessageSubmit.onclick = function(){
+      if (chatMessageInput.value.length === 0) return;
+      chatSocket.send(JSON.stringify({
+        'message': chatMessageInput.value,
+      }));
+      chatMessageInput.value = '';
+    }
+
+
+  </script>
+
+
+  <script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>

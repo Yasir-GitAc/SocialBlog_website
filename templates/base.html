@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" media="all" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kenia&family=Mukta:wght@300;700&display=swap" rel="stylesheet">
+  <script src="{% static 'js/index.js' %}" defer ></script>
+  {% block title %}
+    <title>SocialBlog</title>
+  {% endblock title %}
+</head>
+<body>
+  {% include 'navbar.html' %}
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert_box">
+        <div class="alert-text" >
+          <p>{{message}}</p>
+        </div>
+        <span id="alert-close-btn">
+          <i class="fa-solid fa-xmark close_btn_icon"></i>
+        </span>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% include 'section_left.html' %}
+
+  {% block content %}
+
+  
+  {% endblock content %}
+
+</body>
+</html>

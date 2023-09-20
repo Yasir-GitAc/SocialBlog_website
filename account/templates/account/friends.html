@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>SocialBlog | Friends</title>
+{% endblock title %}
+
+{% block content %}
+  <main class="main_div_right">
+    {% if request.user.is_authenticated %}
+      {% for friend in friends_list %}
+        <div class="multiple_type_list">
+
+          <div class="typelist_div_one">
+            <div class="profile_picture typelist_profile_picture">
+              <a href="{% url 'account:profile' pk=friend.id %}">
+                <img src="{{friend.profile_picture.url}}" class="profile_picture_img" alt="profile_picture" >
+              </a>
+            </div>
+          </div>
+
+          <div class="typelist_div_two">
+            <div class="typelist_owner_div">
+              <a href="{% url 'account:profile' pk=friend.id %}"><p>{{friend.name}}</p></a>
+            </div>
+            <div class="typelist_subject_div">
+              <p>
+                {{friend.bio| slice:":100"}}
+              </p>
+            </div>
+
+            <div class="typelist_button_div">
+              <a href="{% url 'account:profile' pk=friend.id %}" class="btn btn_typelist">Go To Profile</a>
+              <a href="{% url 'account:remove_from_friend_list' friend_id=friend.id  %}" class="btn btn_typelist">Remove</a>
+            </div>
+          </div>    
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="multiple_type_list">
+
+        <div class="typelist_div_two">
+          <div class="typelist_owner_div">
+            <a href="{% url 'account:login' %}"><p>Login/Signup to see friends</p></a>
+          </div>
+          <div class="typelist_subject_div">
+            <p>
+              here is some top contributor to Socailblog
+            </p>
+          </div>
+        </div>   
+      </div>
+
+      {% for profile in contributor_profiles %}
+        <div class="multiple_type_list">
+
+          <div class="typelist_div_one">
+            <div class="profile_picture typelist_profile_picture">
+              <a href="{% url 'account:profile' pk=profile.id %}">
+                <img src="{{profile.profile_picture.url}}" class="profile_picture_img" alt="profile_picture" >
+              </a>
+            </div>
+          </div>
+
+          <div class="typelist_div_two">
+            <div class="typelist_owner_div">
+              <a href="{% url 'account:profile' pk=profile.id %}"><p>{{profile.name}}</p></a>
+            </div>
+            <div class="typelist_subject_div">
+              <p>
+                {{profile.bio| slice:":10"}}
+              </p>
+            </div>
+            <div class="typelist_button_div">
+              <a href="{% url 'account:profile' pk=profile.id %}" class="btn btn_typelist">Go To Profile</a>
+            </div>
+          </div>
+                
+        </div>
+      {% endfor %}
+
+    {% endif %}
+  </main>
+
+{% endblock content %}

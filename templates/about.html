@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kenia&family=Mukta:wght@300;700&display=swap" rel="stylesheet">
+  <title>Socialblog | stay connected</title>
+</head>
+<body>
+  
+  <main class="main_div_about">
+    <div class="main_section">
+
+      <div class="main_picture">
+        <img src="{{admin.profile_picture.url}}" alt="yasir_webdev" >
+      </div>
+      <div class="information">
+        <p>This Is A Demo Website Made For Practice</p>
+        <p>It's Incomplete, some functionality and UI still underdevlopment</p>
+        <p>Completed functionality Listed Below</p>
+        <p>Developed By <span><a href="{% url 'account:profile' pk=admin.id %}" class="link_bold" >Yasir_webdev</a></span></p>
+        <P>This Website Has All The Functionality Listed Below</P>
+        <div class="funtionality_div">
+          <ul>
+            <li><div class="list_dot"></div><p>Live Messaging</p></li>
+            <li><div class="list_dot"></div><p>Searching Functionality</p></li>
+            <li><div class="list_dot"></div><p>Making Friends</p></li>
+            <li><div class="list_dot"></div><p>Making Posts and Sharing Them</p></li>
+            <li><div class="list_dot"></div><p>Like and Comment(underdevlopment)</p></li>
+            <li><div class="list_dot"></div><p>SignUp and Login/Authentication</p></li>
+          </ul>
+        </div>
+        <p>It Utilizes These Technology</p>
+        <ul>
+          <li><div class="list_dot"></div><p>Django Channeles</p></li>
+          <li><div class="list_dot"></div><p>Django, Python</p></li>
+          <li><div class="list_dot"></div><p>Javascript</p></li>
+          <li><div class="list_dot"></div><p>Html and Css</p></li>
+        </ul>
+        <p>Find Me Here</p>
+        <ul>
+          <li><div class="list_dot"></div><a href="">My Website</a></li>
+          <li><div class="list_dot"></div><a href="">Twitter</a></li>
+          <li><div class="list_dot"></div><a href="">Github</a></li>
+          <li><div class="list_dot"></div><a href="">Facebook</a></li>
+        </ul>
+      </div>
+
+
+    </div>
+  </main>
+
+  <script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>

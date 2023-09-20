@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kenia&family=Mukta:wght@300;700&display=swap" rel="stylesheet">
+  <title>Socialblog | stay connected</title>
+</head>
+<body>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert_box">
+        <div class="alert-text" >
+          <p>{{message}}</p>
+        </div>
+        <span id="alert-close-btn">
+          <i class="fa-solid fa-xmark close_btn_icon"></i>
+        </span>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <main class="main_div">
+
+    <div class="form_div">
+  
+      <div class="login_form_header">
+        <p>Welcome Back</p>
+        <p>
+          <a href="{% url 'account:index' %}">
+           Socialblog
+          </a>, Stay Connected 
+        </p>
+      </div>
+  
+      <form method="POST" class="form">
+        {% csrf_token %}
+
+        <label for="username">Username:</label>
+        <input type="text" id="Username" name="username" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+  
+        <button type="submit" class="btn btn_login">Login</button>
+  
+      </form>
+  
+      <div class="login_form_footer" >
+        <p>Don't have an account?<a href="{% url 'account:signup' %}">SignUp</a></p>
+      </div>
+  
+    </div>
+  </main>
+
+
+  <script src="{% static 'js/index.js' %}"></script>
+
+</body>
+</html>
