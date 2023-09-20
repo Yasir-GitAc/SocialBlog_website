@@ -26,9 +26,12 @@ const slides = document.querySelectorAll('.carousel-slide');
 
 
 // alert close btn
-alertCloseBtn.addEventListener('click', ()=>{
-  alertBox.style.display = 'none'
-})
+if (alertBox){
+  console.log(alertBox)
+  alertCloseBtn.addEventListener('click', ()=>{
+    alertBox.style.display = 'none'
+  })
+}
 
 // nav close btn
 
@@ -110,8 +113,10 @@ function prevSlide() {
 }
 
 // Add event listeners for next and previous buttons
-document.querySelector('#next').addEventListener('click', nextSlide);
-document.querySelector('#prev').addEventListener('click', prevSlide);
+if (document.querySelector('#next')){
+  document.querySelector('#next').addEventListener('click', nextSlide);
+  document.querySelector('#prev').addEventListener('click', prevSlide);
+}
 
 // Show the first slide
 showSlide(currentIndex);

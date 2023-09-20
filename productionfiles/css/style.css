@@ -44,11 +44,12 @@ body{
   width: 20em;
   padding: 1em;
   font-size: 1.5rem;
-  /* display: flex; */
-  display: none;   /*----change it before backend  */
+  display: flex;
+  /* display: none;  ----change it before backend  */
   justify-content: space-between;
   color: var(--text-color-light);
   background-color: var(--main-color);
+  z-index: 10;
 }
 
 .close_btn_icon{
@@ -74,6 +75,7 @@ body{
   background: transparent;
   height: calc(100vh - var(--margin-top));
   margin-top: var(--margin-top);
+  margin-bottom: var(--margin-top);
   width: 100%;
   /* display: flex;
   flex-direction: column;
@@ -204,6 +206,16 @@ body{
   color: var(--text-color-muted)
 }
 
+.form textarea{
+  background-color: var(--secondary-color);
+  border: none;
+  border-radius: 2em;
+  font-size: 1.5rem;
+  color: var(--text-color-light);
+  text-align: left;
+  padding-left: 1em;
+  padding-top: 1em;
+}
 
 .form > input:focus,
 .form> textarea:focus {
@@ -418,6 +430,14 @@ nav ul a:hover{
     margin: 0.5em 0; /* Add spacing between navigation links */
   }
 }
+
+/* to prevent the display none of profile_Search */
+@media (max-width:700px){
+  .profile_list_search-bar{
+    display: none;
+  }
+}
+
 
 @media (min-width: 700px) and (max-width: 1024px) {
   .search-bar{
@@ -658,6 +678,7 @@ nav ul a:hover{
   gap:1em;
   border-radius: 1em;
   background-color: var(--main-color);
+  cursor: pointer;
 }
 
 .typelist_profile_picture{
@@ -670,6 +691,10 @@ nav ul a:hover{
   align-items: end;
   gap: 0.5em;
 }
+.typelist_owner_div a{
+  text-decoration: none;
+}
+
 .typelist_button_div a{
   text-decoration: none;
 }
@@ -685,7 +710,7 @@ nav ul a:hover{
 .typelist_owner_div small{
   color:var(--dot-color);
   font-size: 1em;
-  /* opacity: 0.8; */
+  opacity: 0.8;
   padding-bottom: 0.25em;
 }
 
@@ -803,6 +828,13 @@ nav ul a:hover{
 .login_form_header p{
   color: var(--text-color-light);
   font-size: 2rem;
+}
+.login_form_header a{
+  text-decoration: none;
+  color: var(--text-color-light);
+}
+.login_form_header a:hover{
+  text-decoration: underline;
 }
 
 .btn_login {
@@ -1285,6 +1317,7 @@ tai section middle and right a margin-top + 0.7em(padding-top-of-sec_left_inner_
 }
 .contact a{
   text-decoration: none;
+  color:var(--text-color-light)
 }
 .contact a:hover{
   text-decoration: underline;
@@ -1554,6 +1587,22 @@ tai section middle and right a margin-top + 0.7em(padding-top-of-sec_left_inner_
   background-color: var(--secondary-color);
 }
 
+/* new button for post edit and delete, style from left_section_button_div */
+.btn_right_sec_profile{
+  color: var(--text-color-light);
+  text-decoration: none;
+  font-size: 1.2rem;
+  /* width: 85%; */
+  text-align: center;
+  border: 1px solid rgba(58, 59, 60, 0.4);
+  border-radius: 3em;
+  background-color: transparent;
+  margin: 0em 1em 0em 1em;
+  padding: 0.5em 1em 0.5em 1em;
+}
+.btn_right_sec_profile:hover{
+  background-color: var(--secondary-color);
+}
 
 
 .right_section{
@@ -1749,7 +1798,8 @@ tai section middle and right a margin-top + 0.7em(padding-top-of-sec_left_inner_
   padding: 1em;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
+  justify-content: left;
   gap: 1em;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -1761,7 +1811,7 @@ tai section middle and right a margin-top + 0.7em(padding-top-of-sec_left_inner_
 }
 
 .chat{
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: start;
   /* background-color: yellowgreen; */
@@ -1806,18 +1856,18 @@ tai section middle and right a margin-top + 0.7em(padding-top-of-sec_left_inner_
 
 .chat_box_input_section input{
   flex:0 0 75%;
-  padding: 0em 0em 0em 1em;
+  padding: 0.5em 0em 0.5em 1em;
   background-color: var(--secondary-color);
   border: none;
   border-radius: 1rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 300;
   color: var(--text-color-muted);
   text-align:left;
 
 }
 .chat_box_input_section input::placeholder{
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: var(--text-color-muted)
 }
 
@@ -1833,7 +1883,7 @@ tai section middle and right a margin-top + 0.7em(padding-top-of-sec_left_inner_
 }
 
 .chat_box_input_section p{
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 520;
   color: var(--side-of-icons);
   cursor: pointer;
