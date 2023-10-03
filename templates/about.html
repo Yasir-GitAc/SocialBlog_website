@@ -17,7 +17,11 @@
     <div class="main_section">
 
       <div class="main_picture">
-        <img src="{{admin.profile_picture.url}}" alt="yasir_webdev" >
+        {% if admin.profile_picture %}
+          <img src="{{admin.profile_picture.url}}" alt="yasir_webdev" >
+        {% else %}
+          <img src="media/profile_images/Yasir_webdev.jpg"  alt="yasir_webdev">
+        {% endif %}
       </div>
       <div class="information">
         <p>This Is A Demo Website Made For Practice</p>

@@ -96,30 +96,36 @@ removeNavSearchOnlargeScreen();
 window.addEventListener('resize', removeNavSearchOnlargeScreen);
 
 // JavaScript to handle carousel functionality
+// if pore add korsi, js crask na korar jonno
+
 let currentIndex = 0;
 
-function showSlide(index) {
-  carousel.style.transform = `translateX(-${index * 100}%)`;
-}
+if (carousel){
 
-function nextSlide() {
-  currentIndex = (currentIndex + 1) % slides.length;
+  function showSlide(index) {
+    carousel.style.transform = `translateX(-${index * 100}%)`;
+  }
+  
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+  }
+  
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(currentIndex);
+  }
+  
+  // Add event listeners for next and previous buttons
+  if (document.querySelector('#next')){
+    document.querySelector('#next').addEventListener('click', nextSlide);
+    document.querySelector('#prev').addEventListener('click', prevSlide);
+  }
+  
+  // Show the first slide
   showSlide(currentIndex);
 }
 
-function prevSlide() {
-  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-  showSlide(currentIndex);
-}
-
-// Add event listeners for next and previous buttons
-if (document.querySelector('#next')){
-  document.querySelector('#next').addEventListener('click', nextSlide);
-  document.querySelector('#prev').addEventListener('click', prevSlide);
-}
-
-// Show the first slide
-showSlide(currentIndex);
 
 
 

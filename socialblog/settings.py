@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-y)wajm7=n3qk3^5-l)e3q^nsaof0xuz9q1uo5+450*yv6b%5#y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
 DEBUG = False
 
 ALLOWED_HOSTS = ['yasir25.pythonanywhere.com','localhost', '127.0.0.1',]
@@ -142,14 +143,17 @@ EMAIL_HOST_PASSWORD = 'zafqxlabupoflecl'
 
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/images/'
+MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'staticfiles'
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'productionfiles/media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'productionfiles')
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

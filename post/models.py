@@ -28,7 +28,7 @@ class Post(models.Model):
   id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
   owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
   post_content = models.TextField(max_length=2000, null=True, blank=True)
-  post_img = models.ImageField(upload_to='images/uploaded_img', blank=True, null=True)
+  post_img = models.ImageField(upload_to='uploaded_images', blank=True, null=True)
   upvote = models.IntegerField(null=True, blank=True)
   downvote = models.IntegerField(null=True, blank=True)
   comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True)
