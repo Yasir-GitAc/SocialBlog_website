@@ -11,11 +11,35 @@ import uuid
 # Create your views here.
 
 def index(request):
+  posts = Post.objects.all().order_by('-created')
+
+  first_two_posts = posts[:2]
+  second_two_posts = posts[2:4]
+  third_two_posts = posts[4:6]
+  fourth_two_posts = posts[6:8]
+
+  if request.user.is_authenticated:
+    friends_list = list(request.user.profile.friends.all())
+  else:
+    friends_list = []
+
+
+  context = {
+    'posts': posts,
+    'first_two_posts': first_two_posts,
+    'second_two_posts': second_two_posts,
+    'third_two_posts': third_two_posts,
+    'fourth_two_posts': fourth_two_posts,
+    'contact_list': friends_list,
+  }
+  return render(request, 'index.html', context)
+
+
+def search_result(request):
   search_query = ''
 
   if request.GET.get('search_query'):
     search_query = request.GET.get('search_query')
-
 
     posts = Post.objects.filter(
       Q(post_content__icontains = search_query)|
@@ -26,30 +50,8 @@ def index(request):
       'posts': posts,
       'search_query': search_query
     }
-    return render(request, 'list_item.html', context)
-  else:
-    posts = Post.objects.all().order_by('-created')
 
-    first_two_posts = posts[:2]
-    second_two_posts = posts[2:4]
-    third_two_posts = posts[4:6]
-    fourth_two_posts = posts[6:8]
-
-    if request.user.is_authenticated:
-      friends_list = list(request.user.profile.friends.all())
-    else:
-      friends_list = []
-
-    
-    context = {
-      'posts': posts,
-      'first_two_posts': first_two_posts,
-      'second_two_posts': second_two_posts,
-      'third_two_posts': third_two_posts,
-      'fourth_two_posts': fourth_two_posts,
-      'contact_list': friends_list,
-    }
-    return render(request, 'index.html', context)
+  return render(request, 'list_item.html', context)
 
 
 def search_profiles(request):
@@ -82,6 +84,25 @@ def about(request):
     'admin':admin_profile,
   }
   return render(request, 'about.html', context)
+
+def take_a_tour(request):
+
+  if request.method == 'POST':
+    username = request.POST['username']
+    password = request.POST['password']
+
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+      login(request, user)
+      django_messages.success(request, 'LogIn Successful'+ ' ' +username)
+      return redirect('account:index')
+    else:
+      print('Credentials is not matching, please try again.')
+      django_messages.error(request, 'Credentials do not match, please try again.')
+      return redirect('account:take-a-tour')
+
+  return render(request, 'account/take_a_tour.html')
+
 
 def loginuser(request):
   if request.user.is_authenticated:
@@ -117,7 +138,7 @@ def signup(request):
 
   if request.user.is_authenticated:
     return redirect('account:index')
-  
+
   if request.method == 'POST':
     form = custom_user_creation_form(request.POST)
     if form.is_valid():
@@ -135,7 +156,7 @@ def signup(request):
       else:
         django_messages.error(request, 'An error occured during signup, please try again')
         return redirect('account:signup')
-      
+
   context = {
     'form':form
   }
@@ -146,7 +167,7 @@ def signup(request):
 def profile(request,pk):
   profile = Profile.objects.get(id=pk)
   posts = profile.post_set.all().order_by('-created')
-  
+
   if request.user.is_authenticated:
     friends = list(request.user.profile.friends.all())
     friend_requests = list(request.user.profile.friend_request.all())
@@ -180,7 +201,7 @@ def edit_profile(request,pk):
       django_messages.success(request, 'Profile Updated')
 
       return redirect('account:profile', pk=pk)
-  
+
   context = {
     'form':form
   }
@@ -211,19 +232,19 @@ def send_frnd_req(request, sender_id, receiver_id):
   sender_name = sender.name
   subject = f"{sender_name} sent you friend request"
 
-  
+
   notification = Notifications.objects.create(
     type = 'friend_request_send',
     subject = subject,
     sender = sender,
   )
   notification.receivers.set([receiver])
-  
+
   sender.friend_request.add(receiver)
   print('friend request was sent')
 
   return redirect('account:profile', pk=receiver_id)
-  
+
 
 @login_required(login_url='account:login')
 def delete_frnd_req(request, sender_id, receiver_id):
@@ -265,7 +286,7 @@ def cancel_frnd_req(request, sender_id, receiver_id):
   messages.error(request, 'friend request canceled')
 
   return redirect('account:notifications')
-  
+
 @login_required(login_url='account:login')
 def accept_frnd_req(request, sender_id, receiver_id):
   profile_that_will_accept = Profile.objects.get(id=receiver_id)
@@ -292,11 +313,11 @@ def view_friends(request):
     friends_list = list(request.user.profile.friends.all())
   else:
     friends_list = []
-   
+
   profile_list = list(Profile.objects.all())
 
   contributor_profiles = []
-  
+
   for profile in profile_list:
     if profile.post_set.count() > 2 :
       contributor_profiles.append(profile)
@@ -351,7 +372,7 @@ def inbox(request, room_name):
 
   # for inbox messages list
   user_rooms = Room.objects.filter(participants = request.user.profile)
- 
+
   for participant in participants_of_room:
     if participant == request.user.profile:
       sender_p = participant
@@ -376,7 +397,7 @@ def inbox(request, room_name):
 @login_required(login_url='account:login')
 def messages(request):
   user_rooms = Room.objects.filter(participants = request.user.profile)
- 
+
   context = {
     'user_rooms': user_rooms,
   }

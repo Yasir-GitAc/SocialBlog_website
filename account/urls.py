@@ -5,9 +5,11 @@ app_name = 'account'
 
 urlpatterns = [
   path('',views.index, name='index'),
+  path('search-results/', views.search_result, name='search-result'),
   path('about/', views.about, name='about'),
   path('signup/', views.signup, name='signup'),
   path('login/', views.loginuser, name='login'),
+  path('take_a_tour/', views.take_a_tour, name='take-a-tour'),
   path('logout/', views.logoutuser, name='logout'),
 
   path('profile/<str:pk>/', views.profile, name='profile'),
@@ -29,5 +31,5 @@ urlpatterns = [
   path('start_or_join_chat/<str:profile_id>/', views.start_or_join_chat, name='start_or_join_chat'),
   path('inbox/<str:room_name>/', views.inbox, name='inbox'),
   path('messages/', views.messages, name='messages'),
-  
+
 ]
